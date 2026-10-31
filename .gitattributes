@@ -1,0 +1,2 @@
+# Keep package.json line endings consistent across operating systems.
+package.json text eol=lf
