@@ -1,0 +1,67 @@
+name: SRS CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-test:
+    name: Validate and Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check TypeScript
+        run: npm run typecheck
+
+      - name: Require automated tests
+        shell: bash
+        run: |
+          if [ ! -d tests ]; then
+            echo "::error::tests/ directory is missing"
+            exit 1
+          fi
+
+          if ! find tests -type f \( \
+            -name '*.spec.ts' -o \
+            -name '*.test.ts' -o \
+            -name '*.spec.tsx' -o \
+            -name '*.test.tsx' -o \
+            -name '*.spec.js' -o \
+            -name '*.test.js' \
+          \) | grep -q .; then
+            echo "::error::No automated test files found in tests/"
+            exit 1
+          fi
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run automated tests
+        run: npm run test:e2e
+
+      - name: Verify production build
+        run: npm run build
