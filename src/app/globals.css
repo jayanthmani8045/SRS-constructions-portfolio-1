@@ -1,26 +1,142 @@
 @import "tailwindcss";
 
+/*
+ * SRS Constructions - Global Design System
+ *
+ * Headings: Cinzel Decorative
+ * Body/UI: Plus Jakarta Sans
+ *
+ * Theme: Automatic system preference
+ * Gradients: Hero sections and section transitions
+ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light dark;
+
+  /* Light theme: clean content backgrounds */
+  --background: #fffdf8;
+  --foreground: #302821;
+  --surface: #ffffff;
+  --muted-foreground: #61564c;
+  --border: #ddd5c9;
+
+  /* Company icon brand colors */
+  --brand-gold: #ffc501;
+  --brand-red: #ce252f;
+  --brand-stone: #7c7062;
+
+  /* Text colors for branded backgrounds */
+  --brand-gold-foreground: #352800;
+  --brand-red-foreground: #ffffff;
+
+  /* Light hero gradient */
+  --hero-gradient-start: #fffdf8;
+  --hero-gradient-middle: #fff3db;
+  --hero-gradient-end: #f2ece6;
+
+  /* Light transition: hero to content */
+  --section-gradient-start: #f2ece6;
+  --section-gradient-end: #fffdf8;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/*
+ * Follow the visitor's operating-system theme.
+ * No JavaScript or manual theme switch required.
+ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Dark theme: clean content backgrounds */
+    --background: #141414;
+    --foreground: #f8eedb;
+    --surface: #1d1b19;
+    --muted-foreground: #d0bfb0;
+    --border: #4a4038;
+
+    /* Dark hero gradient */
+    --hero-gradient-start: #141414;
+    --hero-gradient-middle: #24201b;
+    --hero-gradient-end: #30221d;
+
+    /* Dark transition: hero to content */
+    --section-gradient-start: #30221d;
+    --section-gradient-end: #141414;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+ * Tailwind CSS 4 design tokens.
+ *
+ * Examples:
+ * bg-background
+ * text-foreground
+ * bg-surface
+ * border-border
+ * bg-brand-red
+ * font-display
+ * font-sans
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-red: var(--brand-red);
+  --color-brand-stone: var(--brand-stone);
+
+  --color-brand-gold-foreground: var(--brand-gold-foreground);
+  --color-brand-red-foreground: var(--brand-red-foreground);
+
+  /* Preserve Step 2 typography */
+  --font-sans: var(--font-plus-jakarta-sans), Arial, Helvetica, sans-serif;
+  --font-display: var(--font-cinzel-decorative), Georgia, serif;
+}
+
+/*
+ * Global base styling
+ */
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-plus-jakarta-sans), Arial, Helvetica, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-cinzel-decorative), Georgia, serif;
+  }
+}
+
+/*
+ * Reusable branded gradient classes.
+ *
+ * Apply these to future website sections.
+ * Ordinary content backgrounds remain solid.
+ */
+@layer components {
+  .srs-hero-gradient {
+    background-color: var(--background);
+    background-image: linear-gradient(
+      135deg,
+      var(--hero-gradient-start) 0%,
+      var(--hero-gradient-middle) 52%,
+      var(--hero-gradient-end) 100%
+    );
+  }
+
+  .srs-section-transition {
+    background-color: var(--background);
+    background-image: linear-gradient(
+      180deg,
+      var(--section-gradient-start) 0%,
+      var(--section-gradient-end) 100%
+    );
+  }
 }
